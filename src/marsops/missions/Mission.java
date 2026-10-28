@@ -19,9 +19,9 @@ public	interface Mission{
     int getProgressUnits();
     String getFailureReason();																									//	null	unless	FAILED
 
-    //List<Agent> getAssignedAgents();					//WAITING FOR A's COMMIT														//	unmodifiable;	empty	until	ASSIGNED
+    //List<Agent> getAssignedAgents();                                                                          //WAITING FOR A's COMMIT														//	unmodifiable;	empty	until	ASSIGNED
 
-    //List<Facility> getTargetFacilities();		//may be empty (e.g. exploration); unmodifiable //WAITING FOR A's COMMIT
+    //List<Facility> getTargetFacilities();		//may be empty (e.g. exploration); unmodifiable         //WAITING FOR A's COMMIT
 
     ResourceRequirement getResourceRequirement();
     //	---	what	agents	and	the	colony	ask	--
@@ -40,25 +40,23 @@ public	interface Mission{
 
     /**
      * null if the mission may start now; otherwise the	reason	(environment, target,facility,state...).
+     * @param env
+     * @return 
      */
     String getStartBlockReason(EnvironmentCondition env);
 
     /**
      * null if a mission already ASSIGNED / IN_PROGRESSmaycontinue;otherwise
      * why	it must fail.
+     * @param env
+     * @return 
      */
-    String getInProgressFailureReason(EnvironmentCondition env);
-    //	---	lifecycle:	called	ONLY	by	MarsColony	--
+    String getInProgressFailureReason(EnvironmentCondition env);        // --- lifecycle: called ONLY by MarsColony--
 
-    //void assign(List<Agent> agents);			// CREATED ->ASSIGNED    //WAITING FOR A's COMMIT
-
+    //void assign(List<Agent> agents);			// CREATED ->ASSIGNED                //WAITING FOR A's COMMIT
     void start();					// ASSIGNED -> IN_PROGRESS
-
     void advance();					// IN_PROGRESS: progress+1; if progress >= duration ->  COMPLETED (calls	onComplete())
-
     void fail(String reason);				// CREATED/ASSIGNED/IN_PROGRESS -> FAILED
-
     boolean isFinished();				// COMPLETED or FAILED
-
     String describe();					// "M-1 [EXPLORATION] IN_PROGRESS 2/3"
 }
