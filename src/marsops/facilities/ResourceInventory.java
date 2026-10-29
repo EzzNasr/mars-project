@@ -80,6 +80,6 @@ public final class ResourceInventory {
 
     /** @return a copy of the stock, never null */
     public Map<ResourceType, Integer> snapshot() {
-        return new EnumMap<>(stock.isEmpty() ? new EnumMap<ResourceType, Integer>(ResourceType.class) : stock);
+        return new EnumMap<>(stock);
     }
 }
