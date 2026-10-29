@@ -149,8 +149,4 @@ public abstract class Robot implements Agent {
         return name + " [" + getClass().getSimpleName() + "] @" + location.getName()
                 + " battery=" + battery + " " + condition + " " + state;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 5e2dff357f26270bf4138e0852f95032985cdf7e
