@@ -7,7 +7,7 @@ import marsops.missions.Mission;
 /**
  * A robotic agent with a battery and a damage condition.
  *
- * @author EzzNasr
+ * @author A
  */
 public abstract class Robot implements Agent {
     public static final int DAMAGE_THRESHOLD = 30;
@@ -149,4 +149,8 @@ public abstract class Robot implements Agent {
         return name + " [" + getClass().getSimpleName() + "] @" + location.getName()
                 + " battery=" + battery + " " + condition + " " + state;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5e2dff357f26270bf4138e0852f95032985cdf7e
