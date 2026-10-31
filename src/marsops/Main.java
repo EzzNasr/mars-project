@@ -19,7 +19,6 @@ import marsops.simulation.Simulation;
 public class Main {
 
     // --- ASCII Formatting Helpers ---
-    private static final String RESET = ""; // Kept plain for cross-platform compatibility without ANSI
     private static final String LINE = "+-----------------------------------------------------------------------------------------+";
     private static final String THICK_LINE = "===========================================================================================";
 
