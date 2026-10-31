@@ -28,9 +28,6 @@ public interface Agent {
     void release();
     default boolean isAvailable() { return isUsable() && !isAssigned(); }
 
-    /**
-      **FIXME i need to have the missions file 
-     */
     String getCannotPerformReason(Mission mission);
     default boolean canPerform(Mission mission) { return getCannotPerformReason(mission) == null; }
 
