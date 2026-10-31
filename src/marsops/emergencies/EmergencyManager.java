@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import marsops.agents.Agent; // waiting for A's commit
-import marsops.colony.MarsColony; // waiting for B's commit
+import marsops.agents.Agent;
+import marsops.colony.MarsColony; // B's class
 import marsops.common.Capability;
 import marsops.common.EmergencyState;
 
-// Handles the emergencies of the colony.
-// It picks responders by asking the agents (canHandle), checks resources and solves or fails.
-// A failed emergency is never retried.
+// Handles the emergencies. It asks the agents who can help (canHandle),
+// checks the resources and then fixes the emergency or gives up.
+// An emergency that failed is never tried again.
 public class EmergencyManager {
     private final MarsColony colony;
     private final List<Emergency> history = new ArrayList<>();
@@ -23,45 +23,35 @@ public class EmergencyManager {
         this.colony = colony;
     }
 
-    // main method, follows the steps from the playbook (section 10.2)
-    public Emergency handle(Emergency emergency) {
-        if (emergency == null) {
-            throw new IllegalArgumentException("emergency required");
-        }
-        // step 1: save it, log it and apply the first effects
-        history.add(emergency);
-        colony.log("Emergency " + emergency.getId() + " [" + emergency.getType() + "] detected at " // waiting for B's commit
-                + emergency.getLocation().getName());
-        emergency.applyInitialEffects(colony);
+    public Emergency handle(Emergency e) {
+        history.add(e);
+        colony.log("Emergency " + e.getId() + " detected at " + e.getLocation().getName());
+        e.applyInitialEffects(colony);
 
-        // steps 2 to 5: each step gives a failure text, null means it worked
-        List<Agent> chosen = new ArrayList<>();
-        String failure = emergency.checkPreconditions(colony);
-        if (failure == null) {
-            failure = pickResponders(emergency, chosen);
+        // each check gives back the problem as text, null means no problem
+        List<Agent> team = new ArrayList<>();
+        String problem = e.checkPreconditions(colony);
+        if (problem == null) {
+            problem = pickResponders(e, team);
         }
-        if (failure == null) {
-            failure = colony.getResourceManager().explainShortage(emergency.getResponseResources()); // waiting for B's commit
-        }
-        if (failure == null) {
-            failure = respond(emergency, chosen);
+        if (problem == null) {
+            problem = colony.getResourceManager().explainShortage(e.getResponseResources());
         }
 
-        // step 7: something failed, so apply the penalty
-        if (failure != null) {
-            emergency.applyUnresolvedPenalty(colony);
-            emergency.setState(EmergencyState.UNRESOLVED, failure);
+        if (problem != null) {
+            e.applyUnresolvedPenalty(colony);
+            e.setState(EmergencyState.UNRESOLVED, problem);
+        } else {
+            solve(e, team);
         }
-        colony.log("Emergency outcome: " + emergency.describe()); // waiting for B's commit
-        return emergency;
+        colony.log("Emergency result: " + e.describe());
+        return e;
     }
 
-    // all emergencies in the order they were handled
     public List<Emergency> getHistory() {
         return Collections.unmodifiableList(history);
     }
 
-    // only the emergencies that are UNRESOLVED
     public List<Emergency> getUnresolved() {
         List<Emergency> result = new ArrayList<>();
         for (Emergency e : history) {
@@ -72,54 +62,42 @@ public class EmergencyManager {
         return result;
     }
 
-    // choose one different agent for each needed capability
-    // returns null if ok, otherwise the reason
-    private String pickResponders(Emergency emergency, List<Agent> chosen) {
-        for (Capability capability : emergency.getRequiredResponderCapabilities()) {
+    // for every capability we take the first free agent that can help
+    // (and that is not already in the team). returns null if we found everybody
+    private String pickResponders(Emergency e, List<Agent> team) {
+        for (Capability capability : e.getRequiredResponderCapabilities()) {
             Agent found = null;
-            for (Agent agent : colony.getAgents()) { // waiting for B's commit
-                if (!chosen.contains(agent)
-                        && !emergency.isExcluded(agent)
-                        && agent.isAvailable() // waiting for A's commit
-                        && agent.canHandle(emergency.getType()) // waiting for A's commit
-                        && agent.hasCapability(capability)) { // waiting for A's commit
-                    found = agent;
+            for (Agent a : colony.getAgents()) {
+                if (!team.contains(a) && !e.isExcluded(a) && a.isAvailable()
+                        && a.canHandle(e.getType()) && a.hasCapability(capability)) {
+                    found = a;
                     break;
                 }
             }
             if (found == null) {
                 return "No available responder with capability " + capability;
             }
-            chosen.add(found);
+            team.add(found);
         }
         return null;
     }
 
-    // send the responders, use the resources and solve the emergency
-    // returns null if ok, otherwise the reason
-    private String respond(Emergency emergency, List<Agent> chosen) {
+    // send the team, pay for the response and fix the emergency
+    private void solve(Emergency e, List<Agent> team) {
         List<String> names = new ArrayList<>();
-        for (Agent agent : chosen) {
-            agent.assignToMission(); // waiting for A's commit
-            agent.setLocation(emergency.getLocation()); // waiting for A's commit
-            emergency.addResponder(agent);
-            names.add(agent.getName());
+        for (Agent a : team) {
+            a.assignToMission();
+            a.setLocation(e.getLocation());
+            e.addResponder(a);
+            names.add(a.getName());
         }
-        if (!colony.getResourceManager().consume(emergency.getResponseResources())) { // waiting for B's commit
-            releaseAll(chosen);
-            return "Response resources could not be consumed";
-        }
-        emergency.applyResolution(colony);
-        emergency.setState(EmergencyState.RESOLVED, "Repaired by " + String.join(", ", names));
-        // responders stay at the emergency location (D-12)
-        releaseAll(chosen);
-        return null;
-    }
+        colony.getResourceManager().consume(e.getResponseResources());
+        e.applyResolution(colony);
+        e.setState(EmergencyState.RESOLVED, "Repaired by " + String.join(", ", names));
 
-    // make the agents free again
-    private void releaseAll(List<Agent> agents) {
-        for (Agent agent : agents) {
-            agent.release(); // waiting for A's commit
+        // free again, but they stay where the emergency was
+        for (Agent a : team) {
+            a.release();
         }
     }
 }

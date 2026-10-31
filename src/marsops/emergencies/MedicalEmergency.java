@@ -2,49 +2,36 @@ package marsops.emergencies;
 
 import java.util.List;
 
-import marsops.agents.Agent; // waiting for A's commit
-import marsops.agents.CrewMember; // waiting for A's commit
-import marsops.colony.MarsColony; // waiting for B's commit
+import marsops.agents.Agent;
+import marsops.agents.CrewMember;
+import marsops.colony.MarsColony; // B's class
 import marsops.common.Capability;
 import marsops.common.EmergencyType;
 import marsops.common.ResourceRequirement;
 import marsops.common.ResourceType;
-import marsops.facilities.Facility; // waiting for A's commit
+import marsops.facilities.Facility;
 
-// Medical emergency (D-16).
-// The patient gets hurt and recovers if a medical officer treats them.
+// A crew member gets hurt and needs a medical officer.
 public class MedicalEmergency extends Emergency {
-    // health the patient gets back after treatment
-    public static final int RECOVERY = 40;
+    private static final int RECOVERY = 40;
 
     private final CrewMember patient;
     private final int severity;
 
-    // the location is where the patient is when the emergency is created
     public MedicalEmergency(String id, CrewMember patient, int severity) {
-        super(id, EmergencyType.MEDICAL_EMERGENCY, requirePatient(patient).getLocation());
+        super(id, EmergencyType.MEDICAL_EMERGENCY, patient.getLocation());
         if (severity <= 0) {
-            throw new IllegalArgumentException("severity must be > 0");
+            throw new IllegalArgumentException("severity must be more than 0");
         }
         this.patient = patient;
         this.severity = severity;
     }
 
-    // used before super() so the patient is checked first
-    private static CrewMember requirePatient(CrewMember patient) {
-        if (patient == null) {
-            throw new IllegalArgumentException("patient required");
-        }
-        return patient;
-    }
-
-    // needs only a medical officer
     @Override
     public List<Capability> getRequiredResponderCapabilities() {
         return List.of(Capability.MEDICAL);
     }
 
-    // 2 medical supplies and 5 oxygen
     @Override
     public ResourceRequirement getResponseResources() {
         return new ResourceRequirement()
@@ -52,36 +39,34 @@ public class MedicalEmergency extends Emergency {
                 .with(ResourceType.OXYGEN, 5);
     }
 
-    // the patient takes damage equal to the severity
     @Override
     protected void applyInitialEffects(MarsColony colony) {
-        patient.takeDamage(severity); // waiting for A's commit
+        patient.takeDamage(severity);
     }
 
-    // the patient is treated and gets health back
     @Override
     protected void applyResolution(MarsColony colony) {
-        patient.recover(RECOVERY); // waiting for A's commit
+        patient.recover(RECOVERY);
     }
 
-    // nothing happens if the patient is not treated
+    // if the patient is not treated nothing else happens
     @Override
     protected void applyUnresolvedPenalty(MarsColony colony) {
     }
 
-    // if the facility is not operational we cannot treat the patient
+    // we can't treat anybody inside a facility that is not working
     @Override
     protected String checkPreconditions(MarsColony colony) {
         if (getLocation() instanceof Facility) {
             Facility facility = (Facility) getLocation();
-            if (!facility.isOperational()) { // waiting for A's commit
+            if (!facility.isOperational()) {
                 return "Facility " + facility.getName() + " is not operational";
             }
         }
         return null;
     }
 
-    // the patient cannot treat themselves
+    // the patient can't treat himself
     @Override
     protected boolean isExcluded(Agent agent) {
         return agent == patient;

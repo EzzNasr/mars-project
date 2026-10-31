@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import marsops.agents.Agent; // waiting for A's commit
-import marsops.colony.MarsColony; // waiting for B's commit
+import marsops.agents.Agent;
+import marsops.colony.MarsColony; // B's class
 import marsops.common.Capability;
 import marsops.common.EmergencyState;
 import marsops.common.EmergencyType;
 import marsops.common.Location;
 import marsops.common.ResourceRequirement;
 
-// Base class for all emergencies (oxygen leak, fire, ...).
-// Each emergency knows what happens when it starts, when it is solved and when it is not solved.
+// Parent of all the emergencies. Every emergency knows what it does to the colony
+// when it starts, when we fix it and when we fail to fix it.
 public abstract class Emergency {
     private final String id;
     private final EmergencyType type;
@@ -22,92 +22,62 @@ public abstract class Emergency {
     private String reason = "";
     private final List<Agent> responders = new ArrayList<>();
 
-    // check the arguments first, then save them
     protected Emergency(String id, EmergencyType type, Location location) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("emergency id required");
-        }
-        if (type == null) {
-            throw new IllegalArgumentException("emergency type required");
-        }
-        if (location == null) {
-            throw new IllegalArgumentException("emergency location required");
+        if (id == null || id.isBlank() || type == null || location == null) {
+            throw new IllegalArgumentException("id, type and location are required");
         }
         this.id = id;
         this.type = type;
         this.location = location;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public EmergencyType getType() { return type; }
+    public Location getLocation() { return location; }
+    public EmergencyState getState() { return state; }
 
-    public EmergencyType getType() {
-        return type;
-    }
+    // the reason it failed, or a small note when it was fixed
+    public String getReason() { return reason; }
 
-    public Location getLocation() {
-        return location;
-    }
+    public List<Agent> getResponders() { return Collections.unmodifiableList(responders); }
 
-    public EmergencyState getState() {
-        return state;
-    }
-
-    // why it was not solved, or a short success message
-    public String getReason() {
-        return reason;
-    }
-
-    // unmodifiable so nobody can change the list from outside
-    public List<Agent> getResponders() {
-        return Collections.unmodifiableList(responders);
-    }
-
-    // one line text, for example: E-1 [OXYGEN_LEAK] RESOLVED - Repaired by Omar
+    // example: E-1 [OXYGEN_LEAK] RESOLVED - Repaired by Eng. Omar, Fixer-1
     public String describe() {
         return id + " [" + type + "] " + state + " - " + reason;
     }
 
-    // which capabilities the responders need (D-10)
+    // who we need to send (one different agent for each capability)
     public abstract List<Capability> getRequiredResponderCapabilities();
 
-    // which resources the response uses (D-11)
+    // what the response costs
     public abstract ResourceRequirement getResponseResources();
 
-    // what happens when the emergency is detected
+    // happens as soon as the emergency starts
     protected abstract void applyInitialEffects(MarsColony colony);
 
-    // what happens when the emergency is solved
+    // happens if somebody fixed it
     protected abstract void applyResolution(MarsColony colony);
 
-    // what happens when the emergency is not solved
+    // happens if nobody could fix it
     protected abstract void applyUnresolvedPenalty(MarsColony colony);
 
-    // returns null if everything is ok, otherwise the reason it cannot be handled
+    // return null when it's ok, or the reason we can't handle it
     protected String checkPreconditions(MarsColony colony) {
         return null;
     }
 
-    // agents that can never respond (for example the patient)
+    // some agents must never answer the call (like the patient)
     protected boolean isExcluded(Agent agent) {
         return false;
     }
 
-    // only used by EmergencyManager
+    // the two methods below are only for EmergencyManager
     void setState(EmergencyState state, String reason) {
-        if (state == null) {
-            throw new IllegalArgumentException("state required");
-        }
         this.state = state;
-        this.reason = reason == null ? "" : reason;
+        this.reason = reason;
     }
 
-    // only used by EmergencyManager
     void addResponder(Agent agent) {
-        if (agent == null) {
-            throw new IllegalArgumentException("agent required");
-        }
         responders.add(agent);
     }
 }
