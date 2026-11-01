@@ -38,9 +38,7 @@ public abstract class AbstractMission implements Mission {
      * @param targetFacilities    facilities the mission works on (null means none)
      * @throws IllegalArgumentException if id is blank, type is null or duration is below 1
      */
-    protected AbstractMission(String id, MissionType type, int durationUnits,
-                              ResourceRequirement resourceRequirement,
-                              List<Facility> targetFacilities) {
+    protected AbstractMission(String id, MissionType type, int durationUnits,ResourceRequirement resourceRequirement,List<Facility> targetFacilities) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("Mission id is required");
         }
@@ -53,10 +51,8 @@ public abstract class AbstractMission implements Mission {
         this.id = id;
         this.type = type;
         this.durationUnits = durationUnits;
-        this.resourceRequirement = (resourceRequirement == null)
-                ? new ResourceRequirement() : resourceRequirement;
-        this.targetFacilities = (targetFacilities == null)
-                ? new ArrayList<>() : new ArrayList<>(targetFacilities);
+        this.resourceRequirement = (resourceRequirement == null)? new ResourceRequirement() : resourceRequirement;
+        this.targetFacilities = (targetFacilities == null)? new ArrayList<>() : new ArrayList<>(targetFacilities);
     }
 
     /**

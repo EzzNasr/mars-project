@@ -37,9 +37,7 @@ public class ExplorationMission extends AbstractMission {
      * @param resources         resources consumed on acceptance
      * @throws IllegalArgumentException if the region is blank or the duration is invalid
      */
-    public ExplorationMission(String id, String regionName, int durationUnits,
-                              int minBatteryPercent, Skill requiredSkill,
-                              List<String> requiredEquipment, ResourceRequirement resources) {
+    public ExplorationMission(String id, String regionName, int durationUnits,int minBatteryPercent, Skill requiredSkill,List<String> requiredEquipment, ResourceRequirement resources) {
         super(id, MissionType.EXPLORATION, durationUnits, resources, null);
         if (regionName == null || regionName.isBlank()) {
             throw new IllegalArgumentException("Region name is required");
@@ -47,8 +45,7 @@ public class ExplorationMission extends AbstractMission {
         this.regionName = regionName;
         this.minBatteryPercent = minBatteryPercent;
         this.requiredSkill = requiredSkill;
-        this.requiredEquipment = (requiredEquipment == null)
-                ? new ArrayList<>() : new ArrayList<>(requiredEquipment);
+        this.requiredEquipment = (requiredEquipment == null)? new ArrayList<>() : new ArrayList<>(requiredEquipment);
     }
 
     /** @return the name of the region to explore */
