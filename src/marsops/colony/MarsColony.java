@@ -143,6 +143,10 @@ public class MarsColony {
         return result;
     }
 
+    /**
+     * 
+     * !Fix this function ( it is not polymorphic , uses instance of )
+     */
     /** @return true if at least one communication station is operational */
     public boolean hasOperationalCommunication() {
         for (Facility facility : facilities) {

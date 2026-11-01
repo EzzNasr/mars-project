@@ -2,15 +2,13 @@ package marsops.simulation;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import marsops.colony.MarsColony; // waiting for B's commit
+import marsops.colony.MarsColony; // waiting for Ahmed commit
 import marsops.common.EnvironmentCondition;
 import marsops.emergencies.Emergency;
 import marsops.emergencies.EmergencyManager;
-import marsops.report.ColonyReport; // waiting for A's commit
+import marsops.report.ColonyReport; // waiting for Ezz  commit
 
 // The simulation clock. It only moves time forward.
-// Nothing is random: changes and emergencies are scheduled or triggered by hand.
 public class Simulation {
     private final MarsColony colony;
     private final EmergencyManager emergencyManager;
