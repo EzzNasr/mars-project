@@ -3,7 +3,7 @@ package marsops.facilities;
 /**
  * A power station with a fixed output.
  *
- * @author A
+ * @author EzzNasr
  */
 public class PowerStation extends Facility {
     private final int outputUnits;

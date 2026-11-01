@@ -11,7 +11,7 @@ import marsops.missions.Mission;
 /**
  * A robot that repairs equipment and responds to technical emergencies.
  *
- * @author A
+ * @author EzzNasr
  */
 public class RepairRobot extends Robot {
     private static final Set<Capability> CAPABILITIES =

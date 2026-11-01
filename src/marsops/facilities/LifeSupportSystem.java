@@ -3,7 +3,7 @@ package marsops.facilities;
 /**
  * The life-support system of a habitat. Owned by the habitat (composition).
  *
- * @author A
+ * @author EzzNasr
  */
 public class LifeSupportSystem {
     private boolean functional = true;

@@ -12,7 +12,7 @@ import marsops.missions.Mission;
 /**
  * A scientist: performs research missions that match their skills.
  *
- * @author A
+ * @author EzzNasr
  */
 public class Scientist extends CrewMember {
     private static final Set<Capability> CAPABILITIES =

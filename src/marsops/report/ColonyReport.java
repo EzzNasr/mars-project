@@ -13,7 +13,7 @@ import marsops.missions.Mission;
 /**
  * Generates a comprehensive status report for the Mars colony.
  *
- * @author A
+ * @author EzzNasr
  */
 public final class ColonyReport {
 

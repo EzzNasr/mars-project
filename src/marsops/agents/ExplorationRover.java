@@ -14,7 +14,7 @@ import marsops.missions.Mission;
 /**
  * A surface rover that carries equipment (aggregation).
  *
- * @author A
+ * @author EzzNasr
  */
 public class ExplorationRover extends Robot {
     private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(

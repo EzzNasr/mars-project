@@ -1252,7 +1252,7 @@ public int lose(ResourceType type, int amount) { ... }
 /**
  * A habitat: a facility where the crew live. It owns its life-support system (composition).
  *
- * @author A
+ * @author EzzNasr
  */
 public class Habitat extends Facility { ... }
 ```

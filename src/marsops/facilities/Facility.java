@@ -12,7 +12,7 @@ import marsops.common.ResourceType;
 /**
  * A colony facility: stores resources (composition) and holds equipment (aggregation).
  *
- * @author A
+ * @author EzzNasr
  */
 public abstract class Facility implements Location {
     private final String name;

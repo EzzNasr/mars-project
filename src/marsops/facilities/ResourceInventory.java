@@ -7,7 +7,7 @@ import marsops.common.ResourceType;
 /**
  * Plain stock book-keeping for one facility. Stock never goes negative.
  *
- * @author A
+ * @author EzzNasr
  */
 public final class ResourceInventory {
     private final Map<ResourceType, Integer> stock = new EnumMap<>(ResourceType.class);

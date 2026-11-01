@@ -5,7 +5,7 @@ import marsops.common.EnvironmentCondition;
 /**
  * The current environmental condition of the colony.
  *
- * @author A
+ * @author EzzNasr
  */
 public class Environment {
     private EnvironmentCondition condition = EnvironmentCondition.NORMAL;

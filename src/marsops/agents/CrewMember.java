@@ -9,7 +9,7 @@ import marsops.common.Skill;
 /**
  * A human crew member. Holds health, fatigue and skills; subclasses define capabilities.
  *
- * @author A
+ * @author EzzNasr
  */
 public abstract class CrewMember implements Agent {
     public static final int UNUSABLE_HEALTH_AT_OR_BELOW = 20;

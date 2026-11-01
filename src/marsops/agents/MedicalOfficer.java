@@ -12,7 +12,7 @@ import marsops.missions.Mission;
 /**
  * A medical officer: treats patients and responds to medical emergencies and fires.
  *
- * @author A
+ * @author EzzNasr
  */
 public class MedicalOfficer extends CrewMember {
     private static final Set<Capability> CAPABILITIES =

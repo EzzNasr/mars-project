@@ -3,7 +3,7 @@ package marsops.facilities;
 /**
  * A communication station: the link is up only while it is operational.
  *
- * @author A
+ * @author EzzNasr
  */
 public class CommunicationStation extends Facility {
     /**

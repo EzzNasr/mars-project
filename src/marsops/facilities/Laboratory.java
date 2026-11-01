@@ -5,7 +5,7 @@ import marsops.common.Equipment;
 /**
  * A laboratory: research happens here; it can catch fire and lose its equipment.
  *
- * @author A
+ * @author EzzNasr
  */
 public class Laboratory extends Facility {
     private boolean onFire = false;

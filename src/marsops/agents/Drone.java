@@ -11,7 +11,7 @@ import marsops.missions.Mission;
 /**
  * A remote-controlled aerial drone.
  *
- * @author A
+ * @author EzzNasr
  */
 public class Drone extends Robot {
     private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(

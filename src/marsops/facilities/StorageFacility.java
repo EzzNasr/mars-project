@@ -3,7 +3,7 @@ package marsops.facilities;
 /**
  * A storage facility: the first place resources are taken from (D-01).
  *
- * @author A
+ * @author EzzNasr
  */
 public class StorageFacility extends Facility {
     /**
