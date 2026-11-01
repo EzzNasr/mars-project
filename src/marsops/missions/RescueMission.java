@@ -18,8 +18,7 @@ import marsops.facilities.Facility;
  */
 public class RescueMission extends AbstractMission {
 
-    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(
-            EnumSet.of(Capability.VEHICLE, Capability.MEDICAL));
+    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(EnumSet.of(Capability.VEHICLE, Capability.MEDICAL));
 
     private final String strandedEntity;
     private final Location strandedAt;
@@ -34,12 +33,9 @@ public class RescueMission extends AbstractMission {
      * @param durationUnits     duration in time units (at least 1)
      * @param minBatteryPercent minimum battery a robot needs to take part
      * @param resources         resources consumed on acceptance
-     * @throws IllegalArgumentException if the entity is blank, location is null
-     *                                  or the duration is invalid
+     * @throws IllegalArgumentException if the entity is blank, location is null or the duration is invalid
      */
-    public RescueMission(String id, String strandedEntity, Location strandedAt,
-                         int durationUnits, int minBatteryPercent,
-                         ResourceRequirement resources) {
+    public RescueMission(String id, String strandedEntity, Location strandedAt,int durationUnits, int minBatteryPercent, ResourceRequirement resources) {
         super(id, MissionType.RESCUE, durationUnits, resources, targetsOf(strandedAt));
         if (strandedEntity == null || strandedEntity.isBlank()) {
             throw new IllegalArgumentException("Stranded entity is required");

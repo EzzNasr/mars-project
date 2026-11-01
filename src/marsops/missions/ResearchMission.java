@@ -18,8 +18,7 @@ import marsops.facilities.Laboratory;
  */
 public class ResearchMission extends AbstractMission {
 
-    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(
-            EnumSet.of(Capability.RESEARCH));
+    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(EnumSet.of(Capability.RESEARCH));
 
     private final Laboratory lab;
     private final Skill requiredSkill;
@@ -36,13 +35,11 @@ public class ResearchMission extends AbstractMission {
      * @param resources         resources consumed on acceptance
      * @throws IllegalArgumentException if lab is null or the duration is invalid
      */
-    public ResearchMission(String id, Laboratory lab, Skill requiredSkill, int durationUnits,
-                           List<String> requiredEquipment, ResourceRequirement resources) {
+    public ResearchMission(String id, Laboratory lab, Skill requiredSkill, int durationUnits, List<String> requiredEquipment, ResourceRequirement resources) {
         super(id, MissionType.RESEARCH, durationUnits, resources, listOf(lab));
         this.lab = lab;
         this.requiredSkill = requiredSkill;
-        this.requiredEquipment = (requiredEquipment == null)
-                ? new ArrayList<>() : new ArrayList<>(requiredEquipment);
+        this.requiredEquipment = (requiredEquipment == null)? new ArrayList<>() : new ArrayList<>(requiredEquipment);
     }
 
     private static List<marsops.facilities.Facility> listOf(Laboratory lab) {

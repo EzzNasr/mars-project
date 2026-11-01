@@ -18,8 +18,7 @@ import marsops.facilities.Facility;
  */
 public class RepairMission extends AbstractMission {
 
-    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet(
-            EnumSet.of(Capability.ENGINEERING, Capability.ROBOTIC_REPAIR));
+    private static final Set<Capability> CAPABILITIES = Collections.unmodifiableSet( EnumSet.of(Capability.ENGINEERING, Capability.ROBOTIC_REPAIR));
 
     private final Facility target;
 
@@ -32,8 +31,7 @@ public class RepairMission extends AbstractMission {
      * @param resources     resources consumed on acceptance
      * @throws IllegalArgumentException if target is null or the duration is invalid
      */
-    public RepairMission(String id, Facility target, int durationUnits,
-                         ResourceRequirement resources) {
+    public RepairMission(String id, Facility target, int durationUnits, ResourceRequirement resources) {
         super(id, MissionType.REPAIR, durationUnits, resources, listOf(target));
         this.target = target;
     }
